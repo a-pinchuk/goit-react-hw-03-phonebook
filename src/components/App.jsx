@@ -9,6 +9,23 @@ export class App extends React.Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const storedContacts = JSON.parse(localStorage.getItem('contacts'));
+    if (storedContacts) {
+      this.setState({
+        contacts: storedContacts,
+      });
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(nextState.contacts));
+      return true;
+    }
+    return false;
+  }
+
   AddingContact = contact => {
     this.setState(({ contacts }) => ({
       contacts: [...contacts, contact],
